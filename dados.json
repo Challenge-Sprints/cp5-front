@@ -1,0 +1,44 @@
+{
+    "Funcionarios":[
+        {
+        "id": 1,
+        "nome": "Dra. Mariana Costa",
+        "cargo": "Médica Pediatra",
+        "setor": "Pediatria",
+        "turno": "Diurno",
+        "salario": 18500.00
+        },
+        {
+        "id": 2,
+        "nome": "Carlos Oliveira",
+        "cargo": "Enfermeiro",
+        "setor": "Emergência",
+        "turno": "Noturno",
+        "salario": 6200.00
+        },
+        {
+        "id": 3,
+        "nome": "Fernanda Lima",
+        "cargo": "Recepcionista",
+        "setor": "Atendimento",
+        "turno": "Diurno",
+        "salario": 2800.00
+        },
+        {
+        "id": 4,
+        "nome": "Dr. João Ribeiro",
+        "cargo": "Cirurgião Geral",
+        "setor": "Centro Cirúrgico",
+        "turno": "Integral",
+        "salario": 23000.00
+        },
+        {
+        "id": 5,
+        "nome": "Luciana Alves",
+        "cargo": "Farmacêutica",
+        "setor": "Farmácia",
+        "turno": "Tarde",
+        "salario": 7200.00
+        }
+    ]
+}
