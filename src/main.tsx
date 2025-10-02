@@ -5,6 +5,7 @@ import App from './App.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './routes/Home/index.tsx'
 import Error from './routes/Error/index.tsx'
+import Funcionario from './routes/Funcionario/index.tsx'
 
 const router = createBrowserRouter([
   {
@@ -15,8 +16,11 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Home/>,
-      }
-      ,
+      },
+      {
+        path: '/Funcionario',
+        element: <Funcionario />,
+      },
 
     ]
   }

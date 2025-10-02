@@ -13,6 +13,11 @@ export default function Cabecalho() {
               </Link>
             </li>
             <li>
+              <Link to="/Funcionario" className="hover:text-blue-500 transition-colors duration-200">
+                Funcionário
+              </Link>
+            </li>
+            <li>
               <Link to="/agendamento" className="hover:text-blue-500 transition-colors duration-200">
                 Agendamento
               </Link>
