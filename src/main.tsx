@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './routes/Home/index.tsx'
 import Error from './routes/Error/index.tsx'
 import Funcionario from './routes/Funcionario/index.tsx'
+import Formulario from './routes/Formulario/index.tsx'
 
 const router = createBrowserRouter([
   {
@@ -18,10 +19,17 @@ const router = createBrowserRouter([
         element: <Home/>,
       },
       {
-        path: '/Funcionario',
+        path: '/funcionarios',
         element: <Funcionario />,
       },
-
+      {
+        path: '/formulario',
+        element: <Formulario/>
+      },
+      {
+        path: '/formulario/:id',
+        element: <Formulario />
+      }
     ]
   }
 ])

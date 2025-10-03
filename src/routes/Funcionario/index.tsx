@@ -1,150 +1,81 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+type Funcionario = {
+  id: number;
+  nome: string;
+  cargo: string;
+  setor: string;
+  turno: string;
+  salario: number;
+};
 
 export default function Funcionario() {
-  const [funcionarios, setFuncionarios] = useState([
-    { id: 1, nome: "João Silva", cargo: "Enfermeiro", setor: "Emergência" },
-    { id: 2, nome: "Maria Oliveira", cargo: "Médica", setor: "Cardiologia" },
-    { id: 3, nome: "Carlos Souza", cargo: "Técnico de Enfermagem", setor: "UTI" },
-    { id: 4, nome: "Ana Pereira", cargo: "Fisioterapeuta", setor: "Reabilitação" },
-    { id: 5, nome: "Pedro Santos", cargo: "Recepcionista", setor: "Atendimento" },
-  ]);
+  const [funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
 
-  const [editandoId, setEditandoId] = useState<number | null>(null);
-  const [formData, setFormData] = useState({ nome: "", cargo: "", setor: "" });
+  useEffect(() => {
+    fetch("http://localhost:3000/Funcionarios")
+      .then((resp) => resp.json())
+      .then((data) => setFuncionarios(data))
+      .catch((error) => console.log(error));
+  }, []);
 
-const excluirFuncionario = (id: number) => {
-    setFuncionarios(funcionarios.filter((f) => f.id !== id));
-  };
-
-const editarFuncionario = (id: number) => {
-    const funcionario = funcionarios.find((f) => f.id === id);
-    if (funcionario) {
-      setEditandoId(id);
-      setFormData({
-        nome: funcionario.nome,
-        cargo: funcionario.cargo,
-        setor: funcionario.setor,
-      });
-    }
-  };
-
-const salvarEdicao = () => {
-    setFuncionarios(
-      funcionarios.map((f) =>
-        f.id === editandoId ? { ...f, ...formData } : f
-      )
-    );
-    setEditandoId(null);
-  };
-
-const inserirFuncionario = () => {
-    const novoId = funcionarios.length + 1;
-    setFuncionarios([
-      ...funcionarios,
-      { id: novoId, nome: `Novo Funcionário ${novoId}`, cargo: "Cargo", setor: "Setor" },
-    ]);
+  const handleDelete = (id: number) => {
+    fetch(`http://localhost:3000/Funcionarios/${id}`, { method: "DELETE" })
+      .then(() => setFuncionarios((prev) => prev.filter((f) => f.id !== id)))
+      .catch((error) => console.log(error));
   };
 
   return (
-    <main className="py-10 px-4 flex flex-col items-center gap-8">
-      <h1 className="text-3xl font-bold text-green-700 mb-6">
-        Lista de Funcionários
-      </h1>
+    <div className="w-3/4 mt-8 p-8 m-auto">
+      <h1 className="text-green-700 text-4xl text-center font-bold mb-8">Lista de Funcionários</h1>
 
-      <div className="w-full max-w-5xl bg-white shadow-lg rounded-lg p-6">
-        <button
-          onClick={inserirFuncionario}
-          className="mb-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-        >
-          + Inserir Novo Funcionário
-        </button>
+      <Link to="/formulario" className="p-2.5 bg-green-600 text-white font-bold rounded-md">
+        Inserir Funcionário
+      </Link>
 
-        <table className="w-full border border-gray-300 rounded-lg overflow-hidden">
-          <thead className="bg-green-600 text-white">
-            <tr>
-              <th className="px-4 py-2 text-left">ID</th>
-              <th className="px-4 py-2 text-left">Nome</th>
-              <th className="px-4 py-2 text-left">Cargo</th>
-              <th className="px-4 py-2 text-left">Setor</th>
-              <th className="px-4 py-2 text-center">Ações</th>
+      <table className="w-full border-2 border-gray-400 m-auto my-5">
+        <thead>
+          <tr className="bg-green-700 text-white *:p-2.5">
+            <th>Nome</th>
+            <th>Cargo</th>
+            <th>Setor</th>
+            <th>Turno</th>
+            <th>Salário</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {funcionarios.map((f) => (
+            <tr key={f.id} className="even:bg-gray-100 *:text-center *:p-2.5">
+              <td>{f.nome}</td>
+              <td>{f.cargo}</td>
+              <td>{f.setor}</td>
+              <td>{f.turno}</td>
+              <td>R$ {f.salario.toFixed(2)}</td>
+              <td>
+                <Link
+                  to={`/formulario/${f.id}`}
+                  className="m-1 bg-blue-600 text-white px-2 py-1 rounded-md hover:font-bold"
+                >
+                  Editar
+                </Link>
+                <button
+                  onClick={() => handleDelete(f.id)}
+                  className="m-1 bg-red-600 text-white px-2 py-1 rounded-md hover:font-bold"
+                >
+                  Excluir
+                </button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {funcionarios.map((f) => (
-              <tr key={f.id} className="border-b hover:bg-gray-50">
-                <td className="px-4 py-2">{f.id}</td>
-
-                {/* Nome */}
-                <td className="px-4 py-2">
-                  {editandoId === f.id ? (
-                    <input
-                      type="text"
-                      value={formData.nome}
-                      onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-                      className="border p-1 rounded w-full"
-                    />
-                  ) : (
-                    f.nome
-                  )}
-                </td>
-
-                {/* Cargo */}
-                <td className="px-4 py-2">
-                  {editandoId === f.id ? (
-                    <input
-                      type="text"
-                      value={formData.cargo}
-                      onChange={(e) => setFormData({ ...formData, cargo: e.target.value })}
-                      className="border p-1 rounded w-full"
-                    />
-                  ) : (
-                    f.cargo
-                  )}
-                </td>
-
-                {/* Setor */}
-                <td className="px-4 py-2">
-                  {editandoId === f.id ? (
-                    <input
-                      type="text"
-                      value={formData.setor}
-                      onChange={(e) => setFormData({ ...formData, setor: e.target.value })}
-                      className="border p-1 rounded w-full"
-                    />
-                  ) : (
-                    f.setor
-                  )}
-                </td>
-
-                {/* Botões */}
-                <td className="px-4 py-2 flex justify-center gap-2">
-                  {editandoId === f.id ? (
-                    <button
-                      onClick={salvarEdicao}
-                      className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition"
-                    >
-                      Salvar
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => editarFuncionario(f.id)}
-                      className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-                    >
-                      Editar
-                    </button>
-                  )}
-                  <button
-                    onClick={() => excluirFuncionario(f.id)}
-                    className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
-                  >
-                    Excluir
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </main>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr className="bg-gray-700 text-white text-center *:p-2.5">
+            <td colSpan={6}>Funcionários cadastrados no sistema</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
   );
 }

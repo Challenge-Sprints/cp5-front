@@ -13,7 +13,7 @@ export default function Cabecalho() {
               </Link>
             </li>
             <li>
-              <Link to="/Funcionario" className="hover:text-blue-500 transition-colors duration-200">
+              <Link to="/funcionarios" className="hover:text-blue-500 transition-colors duration-200">
                 Funcionário
               </Link>
             </li>
